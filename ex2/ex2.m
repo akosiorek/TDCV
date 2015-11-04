@@ -1,6 +1,6 @@
 function ex2
     
-   %%% 1. Median Filtering
+   %% 1. Median Filtering
    img = read_lena();
    
    p = 0.05;
@@ -29,24 +29,25 @@ function ex2
        title(titles{i})
    end
    
-   %%% Bilateral Filtering
+   %% Bilateral Filtering
    sigmas = [1 5 9];
    img = read_lena();
    
+   sigma_r = 0.1;
    figure(2)
    for i = 1:numel(sigmas)
-       sigma = sigmas(i);
+       sigma_d = sigmas(i);
        % 2a implemented in bilateral_filter
        % 2b below
-       bim = bilateral_filter(img, sigma);
-       gim = smooth_gaus(img, sigma);
+       bim = bilateral_filter(img, sigma_d, sigma_r);
+       gim = smooth_gaus(img, sigma_d);
        subplot(3, 2, 2*i-1)
        imshow(bim)
-       title(strcat('bilateral, sigma = ', int2str(sigma)))
+       title(strcat('bilateral, sigma = ', int2str(sigma_d)))
        
        subplot(3, 2, 2*i)
        imshow(gim)
-       title(strcat('gaussian, sigma = ', int2str(sigma)))
+       title(strcat('gaussian, sigma = ', int2str(sigma_d)))
    end
    
    % bilateral vs gaussian:

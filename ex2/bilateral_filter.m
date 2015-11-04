@@ -1,24 +1,24 @@
-function f = bilateral_filter(img, sigma)
+function f = bilateral_filter(img, sigma_d, sigma_r)
     
-    if mod(sigma, 2) == 1
-        p = (3 * sigma - 1) / 2;
+    if mod(sigma_d, 2) == 1
+        p = (3 * sigma_d - 1) / 2;
     else
-        p = 3 * sigma / 2;
+        p = 3 * sigma_d / 2;
     end       
     
     f = zeros(size(img)- 2*p);
     
     for x = p+1:size(img, 1)-p
         for y = p+1:size(img, 2)-p
-            f(x-p, y-p) = bilateral(img(x-p:x+p, y-p:y+p), sigma);
+            f(x-p, y-p) = bilateral(img(x-p:x+p, y-p:y+p), sigma_d, sigma_r);
         end
     end
 end
 
-function h = bilateral(m, sigma)
+function h = bilateral(m, sigma_d, sigma_r)
     
-    c = gaus(closeness(m), sigma);
-    s = gaus(similarity(m), sigma);
+    c = gaus(closeness(m), sigma_d);
+    s = gaus(similarity(m), sigma_r);
     
     mult = c .* s;
     denom = sum(sum(mult));
