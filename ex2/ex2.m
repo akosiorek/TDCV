@@ -22,7 +22,7 @@ function ex2
    imgs = {gaus_img, pepper_img, gaus_gaus, pepper_gaus, gaus_median, pepper_median};
    
    % 1c: median filter works best for salt&pepper, gaussian for gaussian 
-   figure(1)
+   figure()
    for i = 1:numel(imgs)
        subplot(3, 2, i)
        imshow(imgs{i})
@@ -34,7 +34,7 @@ function ex2
    img = read_lena();
    
    sigma_r = 0.1;
-   figure(2)
+   figure()
    for i = 1:numel(sigmas)
        sigma_d = sigmas(i);
        % 2a implemented in bilateral_filter

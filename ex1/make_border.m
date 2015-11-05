@@ -27,6 +27,8 @@ function new_img = make_border(img, X, Y, border)
         new_img(end-X:end, 1:Y) = img(end, 1);
         new_img(1:X, end-Y:end) = img(1, end);
         new_img(end-X:end, end-Y:end) = img(end, end);
+    elseif strcmp(border, 'zero')
+        % already handeled
     end
     
 end

@@ -10,7 +10,7 @@ function ex1
     % results of 1b are plotted against the original image
     blurred = convolution(lena, kernel, 'mirror');
 
-    figure(1)
+    figure()
     subplot(1, 2, 1)
     subimage(lena)
     title('original')
@@ -67,7 +67,7 @@ function ex1
     % 3c
     [m2, o2] = gradients(lena, 2);
 
-    figure(3)
+    figure()
     subplot(3, 2, 1)
     subimage(m0)
     title('magnitude, original')
