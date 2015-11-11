@@ -11,7 +11,7 @@ function ex3
    title('original image')
    
    
-   n = 4;
+   n = 3;
    s0 = 1;
    k = 1.4;
    alpha = 0.04;
