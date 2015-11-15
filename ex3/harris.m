@@ -1,4 +1,4 @@
-function corners = harris(img, n, s0, k, alpha, t)
+function [corners, varargout] = harris(img, n, s0, k, alpha, t)
 %   h = HARRIS(img, n, s0, k, alpha, t)
 %   img - input image
 %   n - scale level
@@ -19,15 +19,15 @@ function corners = harris(img, n, s0, k, alpha, t)
     sigmaD = 0.7 * sigmaI;
 
     % 1. Gaussian-smoothed derivatives at each pixel        
-    g = gaus2d(sigmaD);
-    Ix = conv2(Idx, g, 'same');
-    Iy = conv2(Idy, g, 'same');
+    gD = gaus2d(sigmaD);
+    Ix = conv2(Idx, gD, 'same');
+    Iy = conv2(Idy, gD, 'same');
 
     % 2. 2nd moment matrix
-    g = gaus2d(sigmaI);
-    Ixx = sigmaD^2 * conv2(Ix .* Ix, g, 'same');
-    Ixy = sigmaD^2 * conv2(Ix .* Iy, g, 'same');
-    Iyy = sigmaD^2 * conv2(Iy .* Iy, g, 'same');
+    gI = gaus2d(sigmaI);
+    Ixx = sigmaD^2 * conv2(Ix .* Ix, gI, 'same');
+    Ixy = sigmaD^2 * conv2(Ix .* Iy, gI, 'same');
+    Iyy = sigmaD^2 * conv2(Iy .* Iy, gI, 'same');
 
     detM = Ixx .* Iyy - Ixy.^2;
     traceM = Ixx + Iyy;
@@ -35,12 +35,13 @@ function corners = harris(img, n, s0, k, alpha, t)
 
     R(find(R<t)) = 0;
     corners = non_max_suppresion(R, 3, 3);
+    varargout{1} = sigmaD;
+    varargout{2} = size(gD);
 
-
-    maxR = max(max(R));
-    minR = min(min(R));
-    numC = nnz(corners);        
-    fprintf('sigmaI = %.2f, maxR = %.2f, minR = %.2f, num corners = %d\n', sigmaI, maxR, minR, numC);
+%     maxR = max(max(R))
+%     minR = min(min(R));
+%     numC = nnz(corners);        
+%     fprintf('sigmaI = %.2f, maxR = %.2f, minR = %.2f, num corners = %d\n', sigmaI, maxR, minR, numC);
     
      
 end
