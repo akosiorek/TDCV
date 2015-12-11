@@ -10,6 +10,12 @@ function H = DLT(X1, X2)
     assert(N == size(X2, 1))
     assert(N >= 4)
     
+    T = normalization_matrix(X1);
+    U = normalization_matrix(X2);
+    
+    X1 = X1 * T';
+    X2 = X2 * U';
+    
     A = zeros(2 * N, 9);
     
     for n = 1:N
@@ -23,4 +29,14 @@ function H = DLT(X1, X2)
     
     h = V(:, end);
     H = reshape(h, 3, 3)'; 
+    
+    H = T^-1 * H * U;
+end 
+
+function U = normalization_matrix(X)
+    
+    U = eye(3);
+    U(1:2, 3) = -mean(X(:, 1:2))';
+    s = (mean(sqrt(sum((X * U').^2, 2))) / sqrt(2))^-1;
+    U = s * U;
 end

@@ -1,3 +1,0 @@
-function sift()
-    
-end

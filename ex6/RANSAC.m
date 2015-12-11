@@ -3,12 +3,12 @@ function [final_H, p1, p2] = RANSAC(points1, points2, t, T, N)
     num_points = size(points1, 1);
     assert(num_points == size(points2, 1))
     
-    points1 = padarray(points1, [0 1], 1, 'post');
-    points2 = padarray(points2, [0 1], 1, 'post');
+    points1 = generalize(points1);
+    points2 = generalize(points2);
     
     
     best_consensus = [];
-    size_consensus = 0;
+    consensus_size = 0;
     for n = 1:N
         
        % a) randomly select a sample from data and instansiate model
@@ -36,7 +36,7 @@ function [final_H, p1, p2] = RANSAC(points1, points2, t, T, N)
        end
  
        % store best consensus for e)
-       if size_consensus < num_inliers
+       if consensus_size < num_inliers
            best_consensus = consensus_set;
        end
        
@@ -56,16 +56,4 @@ function [H, p1, p2] = get_result(p1, p2, consensus)
     
     p1 = normalize(p1);
     p2 = normalize(p2);
-end
-
-function dist = distance(p1, p2, H)
-   
-    p2 = normalize((H * p2')');
-    dist = p2 - p1(:, 1:2);
-    dist = sum(dist.^2, 2);
-end
-
-function p = normalize(p)
-    
-   p = p(:, 1:2) ./ repmat(p(:, 3), [1 2]); 
 end
