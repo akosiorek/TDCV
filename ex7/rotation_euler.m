@@ -1,4 +1,4 @@
-function R = rotation_euler(angles)
+function p = rotation_euler(angles, point)
     
     
     a = angles(1);
@@ -9,5 +9,5 @@ function R = rotation_euler(angles)
     B = [cos(b) 0 sin(b); 0 1 0; -sin(b) 0 cos(b)];
     C = [1 0 0; 0 cos(c) -sin(c); 0 sin(c) cos(c)];
     
-    R = A * B * C;   
+    p = point * (A * B * C)';   
 end
