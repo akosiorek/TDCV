@@ -57,6 +57,13 @@ Ts = zeros(44, 3);
 
 options = optimset('MaxFunEvals', 1e6);
 
+figure(2)
+hold on
+grid on
+xlim([-3 3]);
+ylim([-5 3]);
+zlim([0 40]);
+plot_camera(T, 0, R, 0);
 for n = 1:44
     [M, m] = get_points_for_frame(consensus_points, n);
     X0 = [R; T];
@@ -67,7 +74,11 @@ for n = 1:44
 
     R = X(1:3);
     R = mod((R / (2*pi)), 1) * 2 * pi; 
+    T_last = T;
     T = X(4:6);
+    plot_camera(T, T_last, R, n);
+%     drawnow();
+
     Rs(n, :) = R;
     Ts(n, :) = T;
 end
