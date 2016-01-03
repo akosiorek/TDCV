@@ -8,22 +8,21 @@ classdef AdaboostClassifier < handle
         function obj = AdaboostClassifier(numWeakClassifiers)
             obj.weakClassifier = cell(numWeakClassifiers, 1);
             obj.alpha = zeros(numWeakClassifiers, 1);
-            obj.numTries = 10;
+            obj.numTries = 1;
         end
         function train(obj, samples, labels)
             weights = ones(size(samples, 1), 1);
-            for n = 1:numel(obj.weakClassifier)
+            for t = 1:numel(obj.weakClassifier)
                 weights = weights / sum(weights);
                
-                
-                weakClf = obj.createWeakClf(samples, labels, weights);
-                obj.weakClassifier{n} = weakClf;
+                weakClf = WeakClassifier();
+                obj.weakClassifier{t} = weakClf;
+                error = weakClf.train(samples, labels, weights);
+         
                 classification = weakClf.test(samples);
-                errors = classification ~= labels;
+                obj.alpha(t) = 0.5 * log((1-error)/error);
+                weights = weights .* exp(-obj.alpha(t) * labels .* classification); 
                 
-                e = sum(errors);
-                obj.alpha(n) = 0.5 * log((1-e)/e);
-                weights = weights .* exp(labels .* classification * obj.alpha(n)); 
             end 
             
             obj.alpha = obj.alpha / sum(obj.alpha);
@@ -35,22 +34,6 @@ classdef AdaboostClassifier < handle
                 labels = labels + obj.alpha(n) * obj.weakClassifier{n}.test(samples);
             end
             labels = -1 + 2 * (labels > 0);
-        end
-        function clf = createWeakClf(obj, samples, labels, weights)
-            
-            best_clf = WeakClassifier();
-            min_score = best_clf.train(samples, labels, weights);            
-            
-            for n = 1:obj.numTries
-               clf = WeakClassifier();
-               score = clf.train(samples, labels, weights);
-               if score < min_score
-                   min_score = score;
-                   best_clf = clf;
-               end
-            end
-            
-            clf = best_clf;
         end
     end
 end

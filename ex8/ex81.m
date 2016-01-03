@@ -1,6 +1,7 @@
 close all; clear all; clc;
 
 sample_points = [1:9 ceil(logspace(1, 3, 21))];
+
 for n = 1:3
     filename = sprintf('data/data%d.mat', n);
     outputname = sprintf('data/output_%d.png', n);
