@@ -12,7 +12,7 @@ function I = integral_image(img)
     end
 
     for x = 2:X
-        I(1, y, :) = I(1, x-1, :) + img(1, x, :);
+        I(1, x, :) = I(1, x-1, :) + img(1, x, :);
     end
 
     for y = 2:Y
