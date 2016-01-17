@@ -4,10 +4,14 @@ load('data/Classifiers.mat')
 faceDetector = HaarFeatures(classifiers, 1);
 windowSize = faceDetector.windowSize;
 
-img = single(rgb2gray(imread('data/faceC.jpg')));
-img = imresize(img, 2);
-for i = 1:4
-    img = imresize(img, 0.7);
+% img = single(rgb2gray(imread('data/faceC.jpg')));
+img = single(rgb2gray(imread('data/faceA.jpg')));
+img = imresize(img, 0.5);
+size(img)
+
+
+for i = 1:10
+    img = imresize(img, 0.85);
 
     figure(1)
     subplot(2, 1, 1)

@@ -2,7 +2,7 @@ function extract_points(I0, N, M0, m0, d0)
 % ex2
 consensus_points = zeros([N+1 size(M0)]);
 consensus_points(end, :, :, :) = M0;
-h = figure(1);
+% h = figure(1);
 for n = 1:N
     fprintf('Processing image %02d\n', n);
     img_path = sprintf('img_sequence/%04d.png', n);
@@ -14,10 +14,11 @@ for n = 1:N
     matched = m(matches(2, :), :);    
 
     
-%     [H, ~, inliers] = estimateGeometricTransform(matched, matched0, 'similarity');
-%     H.T = H';
-%     consensus = find(all(ismember(matched0, inliers), 2));
-    [H, consensus] = RANSAC(matched0, matched, 10, 25, 1000);
+    [H, ~, inliers] = estimateGeometricTransform(matched, matched0, 'projective');
+    H = H.T';
+    consensus = find(all(ismember(matched0, inliers), 2));
+%     [H, consensus] = RANSAC(matched0, matched, 10, 25, 1000);
+%     H = H / H(3, 3);
     matched = matched(consensus, :);
     
     
