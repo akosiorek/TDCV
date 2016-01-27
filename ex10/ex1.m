@@ -13,6 +13,9 @@ figure(1)
 subplot(2, 1, 1)
 bar(hist);
 xlim([0 256])
+title('histogram')
 
-subplot(2, 1, 2)
+ax = subplot(2, 1, 2);
 imshow(map/255)
+colormap(ax, hot)
+title('probability map')
