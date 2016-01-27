@@ -1,4 +1,4 @@
-function [y, x] = scale_pyramid(img, xx, init_scale, scale_increments, retain_best, score_fun)
+function [y, x] = scale_pyramid(img, xx, init_scale, scale_increments, score_fun, varargin)
     
     s = round([size(img, 1) - xx(4), size(img, 2) - xx(3)] * init_scale);
     XX = 1:s(2);
@@ -7,7 +7,13 @@ function [y, x] = scale_pyramid(img, xx, init_scale, scale_increments, retain_be
     
     increment = (1/init_scale)^(1/scale_increments);
     scale = init_scale;
-    for s = 1:scale_increments
+    
+    if nargin == 6
+        template_fun = varargin{1};
+    end
+    
+    
+    for s = 0:scale_increments
         
         scaled_img = imresize(img, scale);
         xy = round(xx * scale);
@@ -16,11 +22,15 @@ function [y, x] = scale_pyramid(img, xx, init_scale, scale_increments, retain_be
         w = xy(3);
         h = xy(4);
         
-        template = img(y:y+h, x:x+w, :);
+        if exist('template_fun', 'var')
+            template = template_fun(img, x, y, w, h);
+        else
+            template = img(y:y+h, x:x+w, :);
+        end
         
         maxYX = size(scaled_img) - size(template);
-        XX(XX > maxYX(2)) = maxYX(2) -1;
-        XX(XX > maxYX(1)) = maxYX(1)-1;
+        XX(XX > maxYX(2)) = maxYX(2);
+        XX(XX > maxYX(1)) = maxYX(1);
         
         scores = by_points(scaled_img, template, XX, YY, score_fun);
         
