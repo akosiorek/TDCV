@@ -1,6 +1,6 @@
 close all; clear all; clc;
 
-scale = 0.4; 
+scale = 0.25; 
 xx = round([252 213 85 88] * scale);
 xn = xx(1);
 yn = xx(2);
@@ -36,20 +36,22 @@ for n = 1:numel(imgs)
     
     subplot(3, 1, 2)
     hold on
-    ssd_score = ssd(img, template, xs, ys);
+    ssd_score = by_range(img, template, xs, ys, @(x, y) ssd(x, y));
     b = max(ssd_score(:));
     [yn, xn] = find_val(ssd_score, b);
     imshow(ssd_score / b);
     rectangle('Position', [xn yn xx(3:4)], 'EdgeColor', 'r', 'LineWidth', 2 );
+    title('ssd')
     fprintf('ssd diff = %f pixels\n', norm([xn yn] - xx(1:2)));
     
     subplot(3, 1, 3)
     hold on
-    ncc_score = ncc(img, template, xs, ys);
+    ncc_score = by_range(img, template, xs, ys, @(x, y) ncc(x, y));
     a = min(ncc_score(:));
     b = max(ncc_score(:));
     [yn, xn] = find_val(ncc_score, b);
     imshow((ncc_score - a) / (b - a));
     rectangle('Position', [xn yn xx(3:4)], 'EdgeColor', 'r', 'LineWidth', 2 );
+    title('ncc')
     fprintf('ncc diff = %f pixels\n', norm([xn yn] - xx(1:2)));
 end
